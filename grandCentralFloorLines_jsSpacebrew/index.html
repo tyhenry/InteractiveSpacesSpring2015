@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <title>Grand Central - Finding the Way spacebrew controls</title>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+    <script type="text/javascript" src="js/jq.js"></script>
+	<script type="text/javascript" src="js/sb-1.4.1.js"></script>
+    <script type="text/javascript">
+
+		$(window).on("load", setup);
+	      
+		// Spacebrew Object
+		var sb
+			, app_name = "Grand Central - Finding the Way"
+			;
+
+		/**
+	     * setup Configure spacebrew connection and adds the mousedown listener.
+	     */
+		function setup (){
+			/*var random_id = "0000" + Math.floor(Math.random() * 10000)
+				;
+
+			app_name = app_name + ' ' + random_id.substring(random_id.length-4);*/
+
+			// create spacebrew client object
+			sb = new Spacebrew.Client({reconnect:true});
+
+			// set the base description
+			sb.name(app_name);
+			sb.description("This spacebrew client sends floorLine messages.");
+
+			// configure the publication and subscription feeds
+			sb.addPublish( "lineColor", "string", "none" );
+
+			// override Spacebrew events - this is how you catch events coming from Spacebrew
+			sb.onOpen = onOpen;
+
+			// connect to spacbrew
+			sb.connect();
+
+			// listen to the mouse 
+			//$("#buttonMsg").on("mousedown", onButtonPress);
+			//$("#buttonMsg").on("mouseup", onButtonRelease);
+			$("#greenBtn").on("mouseup", function(){
+				sb.send("lineColor", "string", "green");
+			});
+			$("#blueBtn").on("mouseup", function(){
+				sb.send("lineColor", "string", "blue");
+			});
+			$("#redBtn").on("mouseup", function(){
+				sb.send("lineColor", "string", "red");
+			});
+			$("#purpleBtn").on("mouseup", function(){
+				sb.send("lineColor", "string", "purple");
+			});
+			$("#orangeBtn").on("mouseup", function(){
+				sb.send("lineColor", "string", "orange");
+			});
+		}	
+
+		/**
+		 * Function that is called when Spacebrew connection is established
+		 */
+		function onOpen() {
+			var message = "Connected as <strong>" + sb.name() + "</strong>. ";
+			if (sb.name() === app_name) {
+				message += "<br>You can customize this app's name in the query string by adding <strong>name=your_app_name</strong>."
+			}
+			$("#name").html( message );
+		}
+
+		/**
+	     * Function that is called whenever the button is pressed.  
+	     * @param  {Event object} evt Holds information about the button press event
+	     
+		function onButtonPress (evt){
+		      	console.log("[onButtonPress] button has been pressed"); 
+	        //sb.send("buttonPress", "boolean", "true");
+		}*/
+
+		/**
+	     * Function that is called whenever the button is released.  
+	     * @param  {Event object} evt Holds information about the button press event
+	     
+		function onButtonRelease (evt){
+	      	console.log("[onButtonRelease] button has been released"); 
+	        sb.send("lineColor", "string", "green");
+		}*/
+
+	</script>
+	</head>
+
+	<body>
+		<h1>Click to send a message to spacebrew</h1>
+		<h3 id="numclicks"></h3>
+		<a class="button" id="greenBtn">GREEN</a>
+		<a class="button" id="blueBtn">BLUE</a>
+		<a class="button" id="redBtn">RED</a>
+		<a class="button" id="purpleBtn">PURPLE</a>
+		<a class="button" id="orangeBtn">ORANGE</a>
+
+
+		</br></br>
+		<div id="name">Trying to connect</div>
+	</body>
+
+</html>

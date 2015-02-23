@@ -29,7 +29,10 @@ void setup() {
   //sb.addPublish( "buttonPress", "boolean", false ); //what you're sending
 
   // add each thing you subscribe to
-  sb.addSubscribe( "buttonPress", "boolean" ); //what you're receiving
+  sb.addSubscribe( "lineColor", "string" ); //what you're receiving
+  sb.addSubscribe( "ticketWindow", "range" ); //what you're receiving
+  //sb.addSubscribe( "buttonPress", "boolean" ); //what you're receiving
+
 
   // connect to spacebrew
   sb.connect(server, name, description);
@@ -52,6 +55,10 @@ void draw() {
 
 void onRangeMessage( String name, int value ) {
   println("got range message " + name + " : " + value);
+    PVector start = new PVector(-10, (height/8)*value);
+    PVector dest = new PVector(width+10, random(0,height));
+    color c = color(random(0,255),random(0,255),random(0,255));
+    floorLines.add(new FloorLine(start, dest, c));
 }
 
 void onBooleanMessage( String name, boolean value ) { 
@@ -67,6 +74,23 @@ void onBooleanMessage( String name, boolean value ) {
 
 void onStringMessage( String name, String value ) {
   println("got string message " + name + " : " + value);
+  PVector start = new PVector(-10, random(0,height));
+  PVector dest = new PVector(width+10, random(0,height));
+  color c = (color(255,255,255));
+  if (value.equals("green")){
+      c = color(0,255,0);
+  } else if (value.equals("blue")){
+      c = color(0,0,255);
+  } else if (value.equals("red")){
+      c = color(255,00,0);
+  } else if (value.equals("purple")){
+      c = color(199,0,186);
+  } else if (value.equals("orange")){
+      c = color(255,149,0);
+  }
+  floorLines.add(new FloorLine(start, dest, c));
+
+  
 }
 
 void onCustomMessage( String name, String type, String value ) {
